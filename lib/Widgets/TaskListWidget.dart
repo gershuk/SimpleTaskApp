@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 
-import '../Models/TaskList.dart';
+import '../Models/Task.dart';
+import '../Models/TaskContainer.dart';
 import 'AddTaskWidget.dart';
 import 'EditTaskWidget.dart';
 import 'TaskWidget.dart';
 
 class TaskListWidget extends StatefulWidget {
-  TaskList TasksList;
-  bool IsEditable;
+  final TaskContainer tasksList;
+  final bool isEditable;
+  final bool Function(Task)? filterFunction;
 
-  TaskListWidget({required this.TasksList, this.IsEditable = false});
+  const TaskListWidget(
+      {Key? key,
+      required this.tasksList,
+      this.isEditable = false,
+      this.filterFunction})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => TaskListWidgetState();
@@ -17,48 +24,46 @@ class TaskListWidget extends StatefulWidget {
 
 class TaskListWidgetState extends State<TaskListWidget> {
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    var list = widget.filterFunction != null
+        ? widget.tasksList.GetTasksWhere(widget.filterFunction!)
+        : widget.tasksList.GetAllTasks();
+    return Scaffold(
       body: ListView.separated(
-        padding: EdgeInsets.only(top: 10, left: 10, right: 10),
-        itemCount: this.widget.TasksList.Count(),
+        padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+        itemCount: list.length,
         itemBuilder: (context, index) {
-          var list = this.widget.TasksList.GetList();
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: TaskWidget(TaskInfo: list[index])),
+              Expanded(child: TaskWidget(taskInfo: list[index])),
               Padding(
-                  padding: EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 16.0),
                   child: Row(children: [
                     ElevatedButton(
                         onPressed: () => setState(
-                            () => this.widget.TasksList.Remove(list[index].Id)),
-                        child: Tab(icon: Icon(Icons.delete))),
-                    if (this.widget.IsEditable)
+                            () => widget.tasksList.Remove(list[index].id)),
+                        child: const Tab(icon: Icon(Icons.delete))),
+                    if (widget.isEditable)
                       ElevatedButton(
                         onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => EditTaskWidget(
-                                        Task: this.widget.TasksList,
-                                        Id: list[index].Id,
-                                        text: list[index].Text,
-                                        dateTime: list[index].Time.toString())))
+                                        task: widget.tasksList,
+                                        id: list[index].id,
+                                        text: list[index].text,
+                                        dateTime: list[index].time.toString())))
                             .whenComplete(() => setState(() {})),
-                        child: Tab(icon: Icon(Icons.edit)),
+                        child: const Tab(icon: Icon(Icons.edit)),
                       ),
-                    if (this.widget.IsEditable)
+                    if (widget.isEditable)
                       ElevatedButton(
-                        onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditTaskWidget(
-                                    Task: this.widget.TasksList,
-                                    Id: list[index].Id,
-                                    text: list[index].Text,
-                                    dateTime: list[index].Time.toString())))
-                            .whenComplete(() => setState(() {})),
-                        child: Tab(icon: Icon(Icons.done_outlined)),
+                        onPressed: () {
+                          widget.tasksList.CompleteTask(list[index].id);
+                          setState(() {});
+                        },
+                        child: const Tab(icon: Icon(Icons.done_outlined)),
                       ),
                   ]))
             ],
@@ -67,16 +72,17 @@ class TaskListWidgetState extends State<TaskListWidget> {
         separatorBuilder: (BuildContext context, int index) => const Divider(),
       ),
       persistentFooterButtons: [
-        if (this.widget.IsEditable)
+        if (widget.isEditable)
           FloatingActionButton(
             child: const Icon(Icons.add_circle_outlined),
             onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            AddTaskWidget(Task: this.widget.TasksList)))
+                            AddTaskWidget(taskContainer: widget.tasksList)))
                 .whenComplete(() => setState(() {})),
           ),
       ],
     );
+  }
 }

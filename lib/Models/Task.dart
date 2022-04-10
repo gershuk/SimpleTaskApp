@@ -1,14 +1,18 @@
 import 'package:uuid/uuid.dart';
 
-var uuid = Uuid();
+var uuid = const Uuid();
 
 class Task {
-  Task({required this.Text, this.Time});
+  Task({required this.text, this.time});
 
-  Task.withId({required this.Text, required this.Id, this.Time});
+  Task.withId(
+      {required this.text,
+      required this.id,
+      this.time,
+      this.isCompleted = false});
 
-  String Text;
-  DateTime? Time;
-  String Id = uuid.v4();
-  bool IsCompleted = false;
+  String text;
+  DateTime? time;
+  String id = uuid.v4();
+  bool isCompleted = false;
 }

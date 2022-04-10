@@ -1,37 +1,22 @@
 import 'package:flutter/material.dart';
 
-import '../Models/TaskList.dart';
+import '../Models/TaskContainer.dart';
 import 'AbstractTaskInfoWidget.dart';
 
 class EditTaskWidget extends AbstractTaskInfoWidget {
-  String Id;
+  String id;
 
   EditTaskWidget(
-      {required TaskList Task,
-      required String this.Id,
+      {Key? key,
+      required TaskContainer task,
+      required String this.id,
       required String dateTime,
       required String text})
-      : super(EditeableTaskList: Task, text: text, dateTime: dateTime);
+      : super(key: key, taskContainer: task, text: text, dateTime: dateTime);
 
   @override
   void ButtonAction(context) {
-    if (text == null || text.isEmpty) {
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Wrong input'),
-          content: const Text('Text should not be empty'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    } else {
-      EditeableTaskList.CreateOrUpdate(Id, text, DateTime.tryParse(dateTime));
-      Navigator.pop(context);
-    }
+    taskContainer.CreateOrUpdate(id, text, DateTime.tryParse(dateTime));
+    Navigator.pop(context);
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../Models/TaskList.dart';
+import '../Models/Task.dart';
+import '../Models/TaskContainer.dart';
 import 'TaskListWidget.dart';
 
 class MainPage extends StatelessWidget {
+  static TaskContainer taskContainer = TaskContainer();
   const MainPage({Key? key}) : super(key: key);
 
   @override
@@ -19,12 +21,18 @@ class MainPage extends StatelessWidget {
                   Tab(icon: Icon(Icons.done_outline_outlined)),
                 ],
               ),
-              title: Center(child: const Text('Simple Task App')),
+              title: const Center(child: Text('Simple Task App')),
             ),
             body: TabBarView(
               children: [
-                TaskListWidget(TasksList: TaskList(), IsEditable: true),
-                TaskListWidget(TasksList: TaskList())
+                TaskListWidget(
+                    tasksList: taskContainer,
+                    isEditable: true,
+                    filterFunction: (Task t) => !t.isCompleted),
+                TaskListWidget(
+                    tasksList: taskContainer,
+                    isEditable: false,
+                    filterFunction: (Task t) => t.isCompleted)
               ],
             )),
       ),
