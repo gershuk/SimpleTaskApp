@@ -53,7 +53,8 @@ class TaskListWidgetState extends State<TaskListWidget> {
                                         task: widget.tasksList,
                                         id: list[index].id,
                                         text: list[index].text,
-                                        dateTime: list[index].time.toString())))
+                                        dateTime:
+                                            list[index].dateTime.toString())))
                             .whenComplete(() => setState(() {})),
                         child: const Tab(icon: Icon(Icons.edit)),
                       ),

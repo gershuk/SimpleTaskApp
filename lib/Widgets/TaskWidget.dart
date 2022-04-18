@@ -15,10 +15,10 @@ class TaskWidget extends StatelessWidget {
               child: Text(taskInfo.text,
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 20))),
-          if (taskInfo.time != null)
+          if (taskInfo.dateTime != null)
             Align(
                 alignment: Alignment.bottomRight,
-                child: Text(taskInfo.time.toString(),
+                child: Text(taskInfo.dateTime.toString(),
                     style: const TextStyle(color: Colors.grey))),
         ],
       );

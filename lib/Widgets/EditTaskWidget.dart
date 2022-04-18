@@ -16,7 +16,7 @@ class EditTaskWidget extends AbstractTaskInfoWidget {
 
   @override
   void ButtonAction(context) {
-    taskContainer.CreateOrUpdate(id, text, DateTime.tryParse(dateTime));
+    taskContainer.Update(id, text, DateTime.tryParse(dateTime));
     Navigator.pop(context);
   }
 }

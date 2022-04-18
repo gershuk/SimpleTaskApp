@@ -5,8 +5,8 @@ import '../Models/TaskContainer.dart';
 import 'TaskListWidget.dart';
 
 class MainPage extends StatelessWidget {
-  static TaskContainer taskContainer = TaskContainer();
-  const MainPage({Key? key}) : super(key: key);
+  final TaskContainer taskContainer;
+  const MainPage({Key? key, required this.taskContainer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
