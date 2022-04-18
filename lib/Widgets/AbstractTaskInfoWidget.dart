@@ -85,7 +85,26 @@ abstract class AbstractTaskInfoWidget extends StatelessWidget {
                         ),
                       );
                     } else {
-                      ButtonAction(context);
+                      if (dateTime != null &&
+                          dateTime.isNotEmpty &&
+                          !DateTime.parse(dateTime).isAfter(DateTime.now())) {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Wrong input'),
+                            content: const Text(
+                                'Notification time should be set after current time'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        ButtonAction(context);
+                      }
                     }
                   })
             ],

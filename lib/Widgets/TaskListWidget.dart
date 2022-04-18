@@ -30,7 +30,7 @@ class TaskListWidgetState extends State<TaskListWidget> {
         : widget.tasksList.GetAllTasks();
     return Scaffold(
       body: ListView.separated(
-        padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+        padding: const EdgeInsets.only(top: 10, left: 10, right: 2),
         itemCount: list.length,
         itemBuilder: (context, index) {
           return Row(
